@@ -9,5 +9,10 @@ https://drive.google.com/file/d/1LAwd24cV-EBLEOfqqbw_cD-KwvdUDRKj/view?usp=shari
 
 ## Quick Start
 ```
-cp opencvlib.tar to 
+cp opencvlib.tar to dnnsdk_sync/common/lib
+cd dnnsdk_sync
+mkdir build && cd build && cmake ..  make
+cd dnnsdk_sync/bin
+./video_client 64 0
+64:there are 64 chnnal live video to predict  0:camera0 can also appoint to video file path
 ```
