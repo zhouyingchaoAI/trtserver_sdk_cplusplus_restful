@@ -11,16 +11,16 @@ void  dnn_getstate(MODELINFO * versions, int * ncnt, const char * modelname, int
     conlist::getInstance()->getstate(versions, ncnt, modelname, version);
 }
 
-void  dnn_addconn(const char * devip, int chn, const char * modelname)
+void  dnn_addconn(const char * devip, int chn, const char * modelname, pfnDnnCb pcb, void * puser)
 {
-    conlist::getInstance()->addconn(devip, chn, modelname);
+    conlist::getInstance()->addconn(devip, chn, modelname, pcb, puser);
 }
 
-void dnn_predict(const char *devip, int chn, const char *modelname, unsigned char *data, int w, int h, DNNTARGET *objs, int *size)
+void  dnn_predict(const char * devip, int chn, const char * modelname,
+                  unsigned char * data, int w, int h, unsigned int imgid)
 {
-    conlist::getInstance()->predict(devip, chn, modelname, data, w, h, objs, size);
+    conlist::getInstance()->predict(devip, chn, modelname, data, w, h, imgid);
 }
-
 
 void dnn_rmconn(const char * devip, int chn, const char * modelname)
 {

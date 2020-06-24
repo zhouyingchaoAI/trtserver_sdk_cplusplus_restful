@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="utdnn"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\dnn\;CMake Files\demo\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/zyc/workspace/dnnsdk/dnn"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/ninja -v all"/>
+					<CompileFile command="/usr/bin/ninja -v &quot;$file&quot;"/>
+					<Clean command="/usr/bin/ninja -v clean"/>
+					<DistClean command="/usr/bin/ninja -v clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="utdnn">
+				<Option output="/home/zyc/workspace/bin/libutdnnd.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/zyc/workspace/dnnsdk/dnn"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DDLL_EXPORT"/>
+					<Add option="-D_DEBUG"/>
+					<Add option="-D_GLIBCXX_USE_CXX11_ABI=0"/>
+					<Add directory="/home/zyc/workspace/dnnsdk/common/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/ninja -v utdnn"/>
+					<CompileFile command="/usr/bin/ninja -v &quot;$file&quot;"/>
+					<Clean command="/usr/bin/ninja -v clean"/>
+					<DistClean command="/usr/bin/ninja -v clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="utdnn/fast">
+				<Option output="/home/zyc/workspace/bin/libutdnnd.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/zyc/workspace/dnnsdk/dnn"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DDLL_EXPORT"/>
+					<Add option="-D_DEBUG"/>
+					<Add option="-D_GLIBCXX_USE_CXX11_ABI=0"/>
+					<Add directory="/home/zyc/workspace/dnnsdk/common/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/ninja -v utdnn/fast"/>
+					<CompileFile command="/usr/bin/ninja -v &quot;$file&quot;"/>
+					<Clean command="/usr/bin/ninja -v clean"/>
+					<DistClean command="/usr/bin/ninja -v clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/zyc/workspace/dnnsdk/common/src/Log.cpp">
+			<Option target="utdnn"/>
+		</Unit>
+		<Unit filename="/home/zyc/workspace/dnnsdk/common/src/jsoncpp.cpp">
+			<Option target="utdnn"/>
+		</Unit>
+		<Unit filename="/home/zyc/workspace/dnnsdk/common/src/util.cpp">
+			<Option target="utdnn"/>
+		</Unit>
+		<Unit filename="/home/zyc/workspace/dnnsdk/dnn/conlist.cpp">
+			<Option target="utdnn"/>
+		</Unit>
+		<Unit filename="/home/zyc/workspace/dnnsdk/dnn/conlist.h">
+			<Option target="utdnn"/>
+		</Unit>
+		<Unit filename="/home/zyc/workspace/dnnsdk/dnn/connection.cpp">
+			<Option target="utdnn"/>
+		</Unit>
+		<Unit filename="/home/zyc/workspace/dnnsdk/dnn/connection.h">
+			<Option target="utdnn"/>
+		</Unit>
+		<Unit filename="/home/zyc/workspace/dnnsdk/dnn/utdnn.cpp">
+			<Option target="utdnn"/>
+		</Unit>
+		<Unit filename="/home/zyc/workspace/dnnsdk/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/zyc/workspace/dnnsdk/dnn/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\dnn\"/>
+		</Unit>
+		<Unit filename="/home/zyc/workspace/dnnsdk/demo/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\demo\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

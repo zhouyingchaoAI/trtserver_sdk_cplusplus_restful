@@ -10,14 +10,7 @@ using namespace cv;
 int main(int argc, char** argv)
 {
     string cap = "vv.mp4";
-    int chnsize = 4;
-
-    if (argc>=2)
-        chnsize = atoi(argv[1]);
-    if (argc==3)
-        cap = argv[2];
-
-    pfclist::getInstance()->start(cap, chnsize);
+    pfclist::getInstance()->start(cap, 16);
     while(1)
     {
         boost::thread::sleep(boost::get_system_time()

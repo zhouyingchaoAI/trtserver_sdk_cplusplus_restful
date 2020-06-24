@@ -78,7 +78,7 @@ void pfclist::start(string &cap, int chnsize)
         m_imid.insert(make_pair(i, 0));
         std::map<int, std::shared_ptr<SHOWMAT>> tmp;
         m_matreq.insert(make_pair(i, tmp));
-        dnn_addconn("192.168.60.73", i, "helmet");
+        dnn_addconn("192.168.60.73", i, "helmet", dnncb, this);
     }
     boost::thread(boost::bind(&pfclist::run, this)).detach();
 
@@ -86,16 +86,10 @@ void pfclist::start(string &cap, int chnsize)
 
 void pfclist::run()
 {
-    VideoCapture capture;
-    if(m_cap == "0")
-        capture.open(0);
-    else
-        capture.open(m_cap);
+    VideoCapture capture0(0);
 //    capture0.set(CAP_PROP_FRAME_WIDTH, 416);
 //    capture0.set(CAP_PROP_FRAME_HEIGHT, 416);
-    for(int i=0; i<m_chnsz; i++)
-        boost::thread(boost::bind(&pfclist::predict, this, i)).detach();
-
+    boost::thread(boost::bind(&pfclist::predict, this)).detach();
     boost::thread(boost::bind(&pfclist::showManyImages, this)).detach();
 
     int mmm=0;
@@ -104,7 +98,7 @@ void pfclist::run()
 
         cv::Mat frameImage;
 
-        capture >> frameImage;
+        capture0 >> frameImage;
 
         if (frameImage.empty())
         {
@@ -137,58 +131,43 @@ void pfclist::run()
     }
 }
 
-void pfclist::run_one(int chn, Mat image)
+void pfclist::run_one(int chn, Mat frameImage)
 {
+    m_mtxreq.lock();
+    m_imid[chn]++;
+    auto reqmat = std::make_shared<SHOWMAT>();
+    reqmat->image = frameImage;
+    reqmat->time=boost::posix_time::to_iso_string(boost::posix_time::microsec_clock::local_time());
+    if (m_matreq.find(chn) == m_matreq.end())
+        m_matreq.find(chn)->second.insert(make_pair(m_imid[chn], reqmat));
+    resize(frameImage, frameImage, cv::Size(416, 416));
+    m_matreq[chn][m_imid[chn]] = reqmat;
+    m_mtxreq.unlock();
+
     Mat img_32;
     img_32.empty();
-    resize(image, image, cv::Size(416, 416));
-    image.convertTo(img_32, CV_32FC1);
-
-    DNNTARGET *target = new DNNTARGET[100];
-    int size = 0;
-    boost::posix_time::ptime pre = boost::posix_time::microsec_clock::local_time();
-    dnn_predict("192.168.60.73", chn, "helmet", img_32.data, img_32.rows, img_32.cols, target, &size);
-    //dnn_predict("192.168.60.73", chn, "helmet", buf, 416, 416, target, &size);
-
-
-    auto show = std::make_shared<SHOWMATINFO>();
-    show->image = image;
-    for(int i = 0; i<size; i++)
-    {
-        int x = static_cast<int>((target+i)->tlx*image.cols);
-        int y = static_cast<int>((target+i)->tly*image.rows);
-        int w = static_cast<int>(((target+i)->brx - (target+i)->tlx)*image.cols);
-        int h = static_cast<int>(((target+i)->bry - (target+i)->tly)*image.rows);
-        Rect rect(x, y, w, h);
-        show->rect.push_back(rect);
-        show->label.push_back((target+i)->cid);
-    }
-    boost::posix_time::ptime now = boost::posix_time::microsec_clock::local_time();
-    boost::posix_time::time_duration time_span = now - pre;
-    string custtime= "cost time " + to_string(time_span.total_microseconds()/1000) + " ms";
-    show->costtime=custtime;
-
-    m_mtxshow.lock();
-    if(m_matshow.find(chn+1) == m_matshow.end())
-        m_matshow.insert(make_pair(chn+1, show));
-    m_matshow[chn+1] = show;
-    m_updateflag = true;
-    m_mtxshow.unlock();
+    frameImage.convertTo(img_32, CV_32FC1);
+    dnn_predict("192.168.60.73", chn, "helmet", img_32.data, img_32.rows, img_32.cols, m_imid[chn]);
 
 }
 
-void pfclist::predict(int chn)
+void pfclist::predict()
 {
     while(true)
     {
         Mat image;
         bool flag = false;
+//        m_mtxpred.lock();
         flag = m_predflag;
         if(flag)
             image =m_predMat;
+//        m_mtxpred.unlock();
 
         if(flag)
-            run_one(chn, image);
+        {
+            for(int i = 0; i < m_chnsz; i++)
+                run_one(i, image);
+        }
 
     }
 }
@@ -204,16 +183,15 @@ void pfclist::showManyImages()
     while(true)
     {
         cout << "enter display" << endl;
-
+        std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
         if (!m_updateflag)
         {
             boost::this_thread::sleep(boost::posix_time::milliseconds(100));
             continue;
         }
 
-        m_mtxshow.lock();
-        m_updateflag = false;
-        m_mtxshow.unlock();
+//        m_mtxshow.lock();
+//        m_updateflag = false;
 
         if(m_matshow.size() != m_chnsz+1)
         {
@@ -234,10 +212,10 @@ void pfclist::showManyImages()
         case 9:nSizeWindows = Size(3, 3); break;
         case 11:nSizeWindows = Size(4, 3); break;
         case 17:nSizeWindows = Size(5, 4); break;
-        default:nSizeWindows = Size(30, 4);
+        default:nSizeWindows = Size(10, 7);
         }
 
-        int nShowImageSize = 200;
+        int nShowImageSize = 300;
         int nSplitLineSize = 15;
         int nAroundLineSize = 50;
 
@@ -259,8 +237,6 @@ void pfclist::showManyImages()
         int tempPosY = posY;
 
         int i = 0;
-
-        std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
         for (int i=0; i<m_matshow.size(); i++){
 
             if ((i%nSizeWindows.width == 0) && (tempPosX != posX)){
@@ -276,10 +252,10 @@ void pfclist::showManyImages()
                               m_matshow.find(i)->second->rect[j],
                               m_colorid[m_matshow.find(i)->second->label[j]], 4, LINE_8,0);
             }
-
+            m_mtxcv.lock();
             putText(m_matshow.find(i)->second->image, m_matshow.find(i)->second->costtime, Point(5, 40),
                     FONT_HERSHEY_SIMPLEX | FONT_ITALIC, 1.0, Scalar(0, 0, 255), 2, 8);
-
+            m_mtxcv.unlock();
 
 
             resize(m_matshow.find(i)->second->image, tempImage,
@@ -287,15 +263,12 @@ void pfclist::showManyImages()
             tempPosX += (nSplitLineSize + nShowImageSize);
 
         }
-        std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
-        std::chrono::duration<double> time_span = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
-        std::cout << "show image took me " << time_span.count() << " seconds." << endl;
+
 
         m_mtxcv.lock();
         imshow(winname, showWindowsImages);
         waitKey(10);
         m_mtxcv.unlock();
-
 
     }
 

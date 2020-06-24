@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="DLCLIENT"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\dnn\;CMake Files\demo\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/utdnn/Desktop/dnnsdk (copy)/dnn/build"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install/strip">
+				<Option working_dir="/home/utdnn/Desktop/dnnsdk (copy)/dnn/build"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/Makefile&quot;  VERBOSE=1 install/strip"/>
+					<CompileFile command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install">
+				<Option working_dir="/home/utdnn/Desktop/dnnsdk (copy)/dnn/build"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/Makefile&quot;  VERBOSE=1 install"/>
+					<CompileFile command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="install/local">
+				<Option working_dir="/home/utdnn/Desktop/dnnsdk (copy)/dnn/build"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/Makefile&quot;  VERBOSE=1 install/local"/>
+					<CompileFile command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="list_install_components">
+				<Option working_dir="/home/utdnn/Desktop/dnnsdk (copy)/dnn/build"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/Makefile&quot;  VERBOSE=1 list_install_components"/>
+					<CompileFile command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/utdnn/Desktop/dnnsdk (copy)/dnn/build"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/utdnn/Desktop/dnnsdk (copy)/dnn/build"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="utdnn">
+				<Option output="/home/utdnn/Desktop/dnnsdk (copy)/dnn/bin/libutdnnd.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/utdnn/Desktop/dnnsdk (copy)/dnn/build/dnn"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DDLL_EXPORT"/>
+					<Add option="-D_DEBUG"/>
+					<Add option="-D_GLIBCXX_USE_CXX11_ABI=0"/>
+					<Add directory="/home/utdnn/Desktop/dnnsdk (copy)/common/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/dnn/Makefile&quot;  VERBOSE=1 utdnn"/>
+					<CompileFile command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/dnn/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/dnn/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/dnn/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="utdnn/fast">
+				<Option output="/home/utdnn/Desktop/dnnsdk (copy)/dnn/bin/libutdnnd.so" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/utdnn/Desktop/dnnsdk (copy)/dnn/build/dnn"/>
+				<Option object_output="./"/>
+				<Option type="3"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DDLL_EXPORT"/>
+					<Add option="-D_DEBUG"/>
+					<Add option="-D_GLIBCXX_USE_CXX11_ABI=0"/>
+					<Add directory="/home/utdnn/Desktop/dnnsdk (copy)/common/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/dnn/Makefile&quot;  VERBOSE=1 utdnn/fast"/>
+					<CompileFile command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/dnn/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/dnn/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/dnn/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="video_client">
+				<Option output="/home/utdnn/Desktop/dnnsdk (copy)/dnn/bin/video_clientd" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/utdnn/Desktop/dnnsdk (copy)/dnn/build/demo"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DDLL_EXPORT"/>
+					<Add option="-D_DEBUG"/>
+					<Add option="-D_GLIBCXX_USE_CXX11_ABI=0"/>
+					<Add directory="/home/utdnn/Desktop/dnnsdk (copy)/common/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/demo/Makefile&quot;  VERBOSE=1 video_client"/>
+					<CompileFile command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/demo/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/demo/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/demo/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="video_client/fast">
+				<Option output="/home/utdnn/Desktop/dnnsdk (copy)/dnn/bin/video_clientd" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/utdnn/Desktop/dnnsdk (copy)/dnn/build/demo"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DDLL_EXPORT"/>
+					<Add option="-D_DEBUG"/>
+					<Add option="-D_GLIBCXX_USE_CXX11_ABI=0"/>
+					<Add directory="/home/utdnn/Desktop/dnnsdk (copy)/common/include"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/demo/Makefile&quot;  VERBOSE=1 video_client/fast"/>
+					<CompileFile command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/demo/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/demo/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j20 -f &quot;/home/utdnn/Desktop/dnnsdk\ (copy)/dnn/build/demo/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/utdnn/Desktop/dnnsdk (copy)/common/src/Log.cpp">
+			<Option target="utdnn"/>
+		</Unit>
+		<Unit filename="/home/utdnn/Desktop/dnnsdk (copy)/common/src/jsoncpp.cpp">
+			<Option target="utdnn"/>
+		</Unit>
+		<Unit filename="/home/utdnn/Desktop/dnnsdk (copy)/common/src/util.cpp">
+			<Option target="utdnn"/>
+		</Unit>
+		<Unit filename="/home/utdnn/Desktop/dnnsdk (copy)/demo/client.cpp">
+			<Option target="video_client"/>
+		</Unit>
+		<Unit filename="/home/utdnn/Desktop/dnnsdk (copy)/demo/pfclist.cpp">
+			<Option target="video_client"/>
+		</Unit>
+		<Unit filename="/home/utdnn/Desktop/dnnsdk (copy)/demo/pfclist.h">
+			<Option target="video_client"/>
+		</Unit>
+		<Unit filename="/home/utdnn/Desktop/dnnsdk (copy)/dnn/build/CMakeFiles/3.10.2/CompilerIdCXX/CMakeCXXCompilerId.cpp">
+			<Option target="utdnn"/>
+		</Unit>
+		<Unit filename="/home/utdnn/Desktop/dnnsdk (copy)/dnn/conlist.cpp">
+			<Option target="utdnn"/>
+		</Unit>
+		<Unit filename="/home/utdnn/Desktop/dnnsdk (copy)/dnn/conlist.h">
+			<Option target="utdnn"/>
+		</Unit>
+		<Unit filename="/home/utdnn/Desktop/dnnsdk (copy)/dnn/connection.cpp">
+			<Option target="utdnn"/>
+		</Unit>
+		<Unit filename="/home/utdnn/Desktop/dnnsdk (copy)/dnn/connection.h">
+			<Option target="utdnn"/>
+		</Unit>
+		<Unit filename="/home/utdnn/Desktop/dnnsdk (copy)/dnn/utdnn.cpp">
+			<Option target="utdnn"/>
+		</Unit>
+		<Unit filename="/home/utdnn/Desktop/dnnsdk (copy)/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/utdnn/Desktop/dnnsdk (copy)/dnn/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\dnn\"/>
+		</Unit>
+		<Unit filename="/home/utdnn/Desktop/dnnsdk (copy)/demo/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\demo\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

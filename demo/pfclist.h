@@ -38,7 +38,7 @@ public:
     void start(string &cap, int chnsize=4);
     void run();
     void run_one(int chn, Mat frameImage);
-    void predict(int chn);
+    void predict();
 
 
 private:

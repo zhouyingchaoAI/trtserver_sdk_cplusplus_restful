@@ -1,12 +1,14 @@
 ﻿#include "connection.h"
 
-connection::connection(unsigned int chn, std::string srvip, unsigned int srvport, int srvtype, const char * model)
+connection::connection(unsigned int chn, std::string srvip, unsigned int srvport, int srvtype, const char * model, pfnDnnCb pcb, void * puser)
 {
     m_strip = srvip;
     m_iport = srvport;
     m_itype = srvtype;
     m_strmodel = model;
     m_ichn = chn;
+    m_pcb   = pcb;
+    m_puser = puser;
 
     resolver_ = std::make_shared<tcp::resolver>(ioc_);
     stream_ = std::make_shared<beast::tcp_stream>(ioc_);
@@ -20,6 +22,7 @@ connection::connection(unsigned int chn, std::string srvip, unsigned int srvport
         std::cerr << "Error: " << e.what() << std::endl;
         m_bisconnect = false;
     }
+    boost::thread(boost::bind(&connection::run, this)).detach();
 }
 
 connection::~connection()
@@ -33,6 +36,7 @@ connection::~connection()
 void connection::run()
 {
     m_bExit = false;
+    boost::thread(boost::bind(&connection::do_predict, this)).detach();
     net::io_context::work work(ioc_);
     ioc_.run();
     m_bExit = true;
@@ -76,51 +80,114 @@ void connection::fail(beast::error_code ec, const char *what)
     std::cerr << what << ": " << ec.message() << "\n";
 }
 
-void connection::predict(unsigned char *data, int w, int h, string modelname, DNNTARGET *objs, int *size)
+void connection::predict(unsigned char * data, int w, int h, string modelname, unsigned int imgid)
 {
+
+    auto httreq = std::make_shared<HttpReq>();
     char url[256] = {0};
+    uint32_t imid = imgid;
+    char charid[4];
+    memcpy(charid, &imid, 4);
+
+    std::copy(charid, charid+4, std::back_inserter(httreq->query));
+    std::copy(data, data+w*h*3*4, std::back_inserter(httreq->query));
     std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
     sprintf(url, "http://%s:%d/api/infer/%s/1", m_strip.c_str(), m_iport, modelname.c_str());
     string nvreq = "";
-    nvreq = nvreq + "batch_size: 1 input { name: \"image\" } " +
-            " output { name: \"detection_boxes\" } " +
+    nvreq = nvreq + "batch_size: 1 input { name: \"__imid\" } input { name: \"image\" } " +
+            " output { name: \"imid\" } output { name: \"detection_boxes\" } " +
             " output { name: \"detection_classes\" }" +
             " output { name: \"detection_scores\" } output { name: \"num_detections\" } ";
 
-    req_.body().clear();
-    req_.target(gettarget(url));
-    req_.method(http::verb::post);
-    req_.version(11);
-    req_.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
-    req_.set(http::field::host, m_strip);
-    req_.set(http::field::content_type, "application/octet-stream");
-    req_.set(http::field::accept, "*/*");
-    req_.set(http::field::connection, "keep-alive");
-    req_.set(http::field::content_length, 416*416*3*4);
-    req_.insert("NV-InferRequest", nvreq);
-    req_.body().assign(data, data+416*416*3*4);
+    std::copy(url, url+256, std::back_inserter(httreq->url));
+    httreq->nvreq = nvreq;
 
-    http::write(*stream_, req_);
-    res_= {};
-    http::read(*stream_, buffer_, res_);
+    mtxque_.lock();
+    queue_.push(httreq);
+    mtxque_.unlock();
 
-    std::string result { boost::asio::buffers_begin(res_.body().data()),
-                       boost::asio::buffers_end(res_.body().data()) };
+    std::chrono::steady_clock::time_point t2 = std::chrono::steady_clock::now();
+    std::chrono::duration<double> time_span = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
+    //std::cout << "predict took me " << time_span.count() << " seconds." << endl;
+    return;
+
+}
 
 
-    if(result.size() == 0)
+void connection::do_predict()
+{
+    if(m_ichn==0)
+        cout << "here" << endl;
+    while(!m_bExit && m_bisconnect)
+    {
+        std::shared_ptr<HttpReq> req;
+        mtxque_.lock();
+        bool isempty = queue_.empty();
+        if(isempty)
+        {
+            mtxque_.unlock();
+            continue;
+        }
+
+        req = queue_.front();
+        queue_.pop();
+        if(queue_.size() > 5)
+        {
+            queue_.pop();queue_.pop();queue_.pop();queue_.pop();
+        }
+        mtxque_.unlock();
+
+
+        req_.body().clear();
+        req_.target(gettarget(req->url.data()));
+        req_.method(http::verb::post);
+        req_.version(11);
+        req_.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
+        req_.set(http::field::host, m_strip);
+        req_.set(http::field::content_type, "application/octet-stream");
+        req_.set(http::field::accept, "*/*");
+        req_.set(http::field::connection, "keep-alive");
+        req_.set(http::field::content_length, req->query.size());
+        req_.insert("NV-InferRequest", req->nvreq);
+        req_.body().assign(req->query.begin(), req->query.end());
+
+        http::write(*stream_, req_);
+        res_= {};
+        http::read(*stream_, buffer_, res_);
+
+        std::string result { boost::asio::buffers_begin(res_.body().data()),
+                           boost::asio::buffers_end(res_.body().data()) };
+
+        if(m_pcb)
+            postresult(result);
+
+    }
+}
+
+
+
+void connection::postresult(string str)
+{
+    if(str.size() == 0)
         return;
+    string tmp = str.substr(str.find("model_name"));
+    string modelname = tmp.substr(tmp.find_first_of("\"")+1);
+    modelname = modelname.substr(0, modelname.find_first_of("\""));
+    if (modelname != "helmet")
+        cout << modelname;
 
-    char* p = const_cast<char *>(result.c_str());
-    uint32_t imid1;
+    char* p = const_cast<char *>(str.c_str());
+    uint32_t imid;
     float detection_boxes[100][4];
     float  detection_classes[100];
     float detection_scores[100];
     int   num_detections;
-    memcpy(detection_boxes, p, 100*4*4);
-    memcpy(detection_scores, p+1600, 100*4);
-    memcpy(detection_classes, p+1600+400, 100*4);
-    memcpy(&num_detections, p+1600+400+400, 4);
+
+    memcpy(&imid, p, 4);
+    memcpy(detection_boxes, p+4, 100*4*4);
+    memcpy(detection_scores, p+1600+4, 100*4);
+    memcpy(detection_classes, p+1600+400+4, 100*4);
+    memcpy(&num_detections, p+1600+400+400+4, 4);
     p=nullptr;
     DNNTARGET *target = new DNNTARGET[num_detections];
     for(int i=0; i<num_detections; i++)
@@ -132,11 +199,9 @@ void connection::predict(unsigned char *data, int w, int h, string modelname, DN
         (target+i)->brx = detection_boxes[i][2] / 416;
         (target+i)->bry = detection_boxes[i][3] / 416;
     }
-
-    std::copy(&target[0], &target[0]+num_detections, objs);
-    *size = num_detections;
+    cout << "通道" << m_ichn << "收到推理结果 id=" << imid  << endl;
+    m_pcb(m_ichn, imid, modelname.c_str(), target, num_detections, m_puser);
     delete [] target;
-    return;
 }
 
 void connection::getstate(string ip, unsigned int port, string url, string modelname, vector<MODELINFO> &modellist)
