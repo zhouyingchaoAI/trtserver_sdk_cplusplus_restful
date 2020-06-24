@@ -55,26 +55,27 @@ void conlist::getstate(MODELINFO * versions, int * ncnt, const char * modelname,
     return;
 }
 
-void conlist::addconn(const char * devip, int chn, const char * modelname)
+void conlist::addconn(const char * devip, int chn, const char * modelname, pfnDnnCb pcb, void * puser)
 {
     char id[256] = {0};
     sprintf(id, "%s_%d_%s", devip, chn, modelname);
     boost::mutex::scoped_lock lock(m_conmtx);
     if(m_mapcon.find(id) == m_mapcon.end())
     {
-        boost::shared_ptr<connection> pconn(new connection(chn, m_strip, m_iport, m_itype, modelname));
+        boost::shared_ptr<connection> pconn(new connection(chn, m_strip, m_iport, m_itype, modelname, pcb, puser));
         m_mapcon.insert(make_pair(id, pconn));
     }
 }
 
-void conlist::predict(const char *devip, int chn, const char *modelname, unsigned char *data, int w, int h, DNNTARGET *objs, int *size)
+void conlist::predict(const char * devip, int chn, const char * modelname,
+                      unsigned char * data, int w, int h, unsigned int imgid)
 {
     char id[256] = {0};
     sprintf(id, "%s_%d_%s", devip, chn, modelname);
-    //boost::mutex::scoped_lock lock(m_conmtx);
+    boost::mutex::scoped_lock lock(m_conmtx);
     map<string, boost::shared_ptr<connection>>::iterator it = m_mapcon.find(id);
     if(it != m_mapcon.end())
-        it->second->predict(data, w, h, modelname, objs, size);
+        it->second->predict(data, w, h, modelname, imgid);
 }
 
 void conlist::rmconn(const char * devip, int chn, const char * modelname)

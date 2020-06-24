@@ -71,9 +71,11 @@ UTDNN_API void  dnn_getstate(MODELINFO * versions, int * ncnt, const char * mode
  * @param [in] devip     NVR IP
  * @param [in] chn       通道号
  * @param [in] modelname 模型名(使用该模型的最新版本号)
+ * @param [in] pcb       后续请求的响应结果回调
+ * @param [in] puser     用户数据
  * @return void
  */
-UTDNN_API void  dnn_addconn(const char * devip, int chn, const char * modelname);
+UTDNN_API void  dnn_addconn(const char * devip, int chn, const char * modelname, pfnDnnCb pcb, void * puser);
 
 /**
  * @brief 单帧数据请求
@@ -83,9 +85,8 @@ UTDNN_API void  dnn_addconn(const char * devip, int chn, const char * modelname)
  * @param [in] data      图片数据
  * @param [in] imgid     图片帧ID
  */
-
 UTDNN_API void  dnn_predict(const char * devip, int chn, const char * modelname,
-                            unsigned char * data, int w, int h, DNNTARGET * objs, int *size);
+                            unsigned char * data, int w, int h, unsigned int imgid);
 
 /**
  * @brief 删除深度学习服务请求对象

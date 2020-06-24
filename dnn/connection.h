@@ -25,23 +25,31 @@ namespace net = boost::asio;            // from <boost/asio.hpp>
 using tcp = boost::asio::ip::tcp;       // from <boost/asio/ip/tcp.hpp>
 using namespace std;
 
+struct HttpReq
+{
+    vector<char> url;
+    string nvreq;
+    vector<unsigned char> query;
+};
+
 class connection : public boost::enable_shared_from_this<connection>
 {
 public:
-    connection(unsigned int chn, string srvip, unsigned int srvport, int srvtype, const char * model);
+    connection(unsigned int chn, string srvip, unsigned int srvport, int srvtype, const char * model, pfnDnnCb pcb, void * puser);
     ~connection();
 
 public:
-    void predict(unsigned char * data, int w, int h, string modelname, DNNTARGET * objs, int *size);
+    void predict(unsigned char * data, int w, int h, string modelname, unsigned int imgid);
 
     static void getstate(string ip, unsigned int port, string url, string modelname, vector<MODELINFO> &modellist);
 
     void update(string srvip, unsigned int srvport, int srvtype);
 
 private:
+    void postresult(string str);
     void run();
     void fail(beast::error_code ec, const char *what);
-
+    void do_predict();
     void on_write(beast::error_code ec, std::size_t bytes_transferred);
     void on_read(beast::error_code ec, std::size_t bytes_transferred);
     static string gettarget(string url);
@@ -57,6 +65,8 @@ public:
     http::request<http::string_body> req_;
     http::response<http::dynamic_body> res_;
     net::io_context ioc_;
+    queue<std::shared_ptr<HttpReq>> queue_;
+    boost::mutex                    mtxque_;
 
 private:
     string       m_strip;
@@ -64,6 +74,8 @@ private:
     unsigned int m_ichn;
     int          m_itype;
     string       m_strmodel;
+    pfnDnnCb     m_pcb;
+    void *       m_puser;
     bool         m_bExit;
 
 

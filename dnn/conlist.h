@@ -17,12 +17,10 @@ public:
 
     void  getstate(MODELINFO * versions, int * ncnt, const char * modelname, int version = -1);
 
-    void addconn(const char * devip, int chn, const char * modelname);
+    void addconn(const char * devip, int chn, const char * modelname, pfnDnnCb pcb, void * puser);
 
     void predict(const char * devip, int chn, const char * modelname,
                  unsigned char * data, int w, int h, unsigned int imgid);
-    void predict(const char * devip, int chn, const char * modelname,
-                 unsigned char * data, int w, int h, DNNTARGET * objs, int *size);
 
     void rmconn(const char * devip, int chn, const char * modelname);
 
