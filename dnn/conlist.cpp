@@ -12,17 +12,12 @@ conlist::~conlist()
     m_strip = "";
 }
 
-void conlist::init(const char * srvip, unsigned int srvport, int srvtype)
+void conlist::init(void * pdnn, const char * srvip, unsigned int srvport)
 {
-    if(m_strip.compare("") == 0) //更改服务器时，释放原有资源，需要更新map中每个连接对象的信息
-    {
-        boost::mutex::scoped_lock lock(m_conmtx);
-        for(map<string, boost::shared_ptr<connection>>::iterator it = m_mapcon.begin(); it != m_mapcon.end(); it++)
-            it->second->update(srvip, srvport, srvtype);
-    }
+    if(pdnn != NULL && m_strip.compare(srvip) != 0) //更改服务器时，释放原有资源，需要更新map中每个连接对象的信息
+        ((connection*)pdnn)->update(srvip, srvport);
     m_strip = srvip;
     m_iport = srvport;
-    m_itype = srvtype;
 }
 
 void conlist::getstate(MODELINFO * versions, int * ncnt, const char * modelname, int version)
@@ -45,6 +40,7 @@ void conlist::getstate(MODELINFO * versions, int * ncnt, const char * modelname,
         }
         return;
     }
+    int nnn = *ncnt;
     if(*ncnt >= static_cast<int>(modellist.size()))
     {
         std::copy(&modellist[0], &modellist[0]+modellist.size(), versions);
@@ -55,34 +51,13 @@ void conlist::getstate(MODELINFO * versions, int * ncnt, const char * modelname,
     return;
 }
 
-void conlist::addconn(const char * devip, int chn, const char * modelname)
+void * conlist::addconn(const char * modelname)
 {
-    char id[256] = {0};
-    sprintf(id, "%s_%d_%s", devip, chn, modelname);
-    boost::mutex::scoped_lock lock(m_conmtx);
-    if(m_mapcon.find(id) == m_mapcon.end())
-    {
-        boost::shared_ptr<connection> pconn(new connection(chn, m_strip, m_iport, m_itype, modelname));
-        m_mapcon.insert(make_pair(id, pconn));
-    }
+    return new connection(m_strip, m_iport, modelname);
 }
 
-void conlist::predict(const char *devip, int chn, const char *modelname, unsigned char *data, int w, int h, DNNTARGET *objs, int *size)
+void conlist::rmconn(void * pdnn)
 {
-    char id[256] = {0};
-    sprintf(id, "%s_%d_%s", devip, chn, modelname);
-    //boost::mutex::scoped_lock lock(m_conmtx);
-    map<string, boost::shared_ptr<connection>>::iterator it = m_mapcon.find(id);
-    if(it != m_mapcon.end())
-        it->second->predict(data, w, h, modelname, objs, size);
-}
-
-void conlist::rmconn(const char * devip, int chn, const char * modelname)
-{
-    char id[256] = {0};
-    sprintf(id, "%s_%d_%s", devip, chn, modelname);
-    boost::mutex::scoped_lock lock(m_conmtx);
-    map<string, boost::shared_ptr<connection>>::iterator it = m_mapcon.find(id);
-    if(it != m_mapcon.end())
-        m_mapcon.erase(it);
+	if (pdnn != NULL)
+		delete pdnn;
 }

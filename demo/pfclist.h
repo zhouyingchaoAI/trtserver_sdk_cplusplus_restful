@@ -9,6 +9,10 @@
 using namespace std;
 using namespace cv;
 
+typedef boost::shared_mutex Lock;
+typedef boost::unique_lock< Lock > WriteLock;
+typedef boost::shared_lock< Lock > ReadLock;
+
 struct SHOWMAT
 {
     Mat image;
@@ -23,6 +27,12 @@ struct SHOWMATINFO
     std::vector<int> label;
 };
 
+struct PREMAT
+{
+    Mat image;
+    bool isupdate;
+};
+
 
 class pfclist
 {
@@ -35,17 +45,10 @@ public:
     pfclist();
 
     void showManyImages();
-    void start(string &cap, int chnsize=4);
+    void start(string &cap, int chnsize, string svrip, int svrport, string modelname);
     void run();
     void run_one(int chn, Mat frameImage);
     void predict(int chn);
-
-
-private:
-    static void dnncb(unsigned int chn, unsigned int fid, const char * model, DNNTARGET * objs, int size, void * puser);
-
-    void dnncbhander(unsigned int chn, unsigned int fid, const char * model, DNNTARGET * objs, int size);
-
 
 
 
@@ -53,18 +56,27 @@ private:
     Scalar m_colorid[3]={Scalar(255, 0, 0), Scalar(255, 255, 0), Scalar(255, 0, 255)};
     string m_cap;
     int m_chnsz;
-    std::mutex m_mtxreq;
+
     std::map<int, std::map<int, std::shared_ptr<SHOWMAT>>> m_matreq;
 
-    std::mutex m_mtxshow;
-    std::mutex m_mtxcv;
+    Lock m_mtxshow;
+
+    //Lock m_mtxcv;
     std::map<int, std::shared_ptr<SHOWMATINFO>>    m_matshow;
     std::map<int, int>                m_imid;
     bool                              m_updateflag;
 
-    std::mutex                        m_mtxpred;
-    bool                              m_predflag;
-    Mat                               m_predMat;
+    std::array<void*, 10>                 m_dnnhandel;
+    std::array<Lock, 10>                 m_mtxpred;
+    std::array<PREMAT, 10>                  m_predMat;
+    int                                     m_isvrtype;
+    string                                  m_strsvrip;
+    int                                     m_isvrport;
+    string                                  m_strmodelname;
+
+//    Lock                              m_mtxpred;
+//    int                               m_predflag;
+//    Mat                               m_predMat;
 
 
 

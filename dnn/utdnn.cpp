@@ -1,9 +1,10 @@
 ﻿#include "utdnn.h"
 #include "conlist.h"
+#include "connection.h"
 
-void dnn_init(const char * srvip, unsigned int srvport, int srvtype)
+void dnn_init(void * pdnn, const char * srvip, unsigned int srvport)
 {
-    conlist::getInstance()->init(srvip, srvport, srvtype);
+    conlist::getInstance()->init(pdnn, srvip, srvport);
 }
 
 void  dnn_getstate(MODELINFO * versions, int * ncnt, const char * modelname, int version)
@@ -11,18 +12,19 @@ void  dnn_getstate(MODELINFO * versions, int * ncnt, const char * modelname, int
     conlist::getInstance()->getstate(versions, ncnt, modelname, version);
 }
 
-void  dnn_addconn(const char * devip, int chn, const char * modelname)
+void  * dnn_addconn(const char * modelname)
 {
-    conlist::getInstance()->addconn(devip, chn, modelname);
+    return conlist::getInstance()->addconn(modelname);
 }
 
-void dnn_predict(const char *devip, int chn, const char *modelname, unsigned char *data, int w, int h, DNNTARGET *objs, int *size)
+void dnn_predict(void * pdnn, unsigned char *data, int w, int h, DNNTARGET *objs, int *size, int jpgsize)
 {
-    conlist::getInstance()->predict(devip, chn, modelname, data, w, h, objs, size);
+	if(pdnn != NULL)
+        ((connection*)pdnn)->predict(data, w, h, objs, size, jpgsize);
 }
 
 
-void dnn_rmconn(const char * devip, int chn, const char * modelname)
+void dnn_rmconn(void * pdnn)
 {
-    conlist::getInstance()->rmconn(devip, chn, modelname);
+    conlist::getInstance()->rmconn(pdnn);
 }

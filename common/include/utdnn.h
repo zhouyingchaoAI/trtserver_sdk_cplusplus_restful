@@ -19,6 +19,7 @@
 typedef struct
 {
     int  version;   //模型版本号
+    int  type;
     int  state;     //此版本是否在线可用, 0 = 不可用， 1 = 可用
 }MODELINFO;
 
@@ -32,29 +33,18 @@ typedef struct
     float bry;        //右下角y坐标(bottom-right)
 }DNNTARGET;
 
-/**
- * @brief 深度学习模型预测请求结果回调原型
- * @param [in] imgid     dnn_predict对应的图片帧ID
- * @param [in] modelname dnn_addchn提供的模型名
- * @param [in] objs      检测到的目标列表
- * @param [in] size      检测到的目标个数
- * @param [in] puser     dnn_addchn提供的用户数据
- * @return void
- */
-typedef void (*pfnDnnCb)(unsigned int chn, unsigned int imgid, const char * modelname, DNNTARGET * objs, int size, void * puser);
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /**
  * @brief 设置或修改深度学习服务器地址
+ * @param [in] pdnn    dnn对象，若不为空则为修改深度学习服务器地址
  * @param [in] srvip   深度学习服务器IP
  * @param [in] srvport 深度学习服务器端口
- * @param [in] srvtype 深度学习服务器类型：DNN_SERVER_TRT = TensorRT server, DNN_SERVER_TFS = Tensorflow serving
  * @return void
  */
-UTDNN_API void dnn_init(const char * srvip, unsigned int srvport, int srvtype = DNN_SERVER_TRT);
+UTDNN_API void dnn_init(void * pdnn, const char * srvip, unsigned int srvport);
 
 /**
  * @brief 获取模型版本信息、测试深度学习服务器连接状态
@@ -67,25 +57,23 @@ UTDNN_API void dnn_init(const char * srvip, unsigned int srvport, int srvtype = 
 UTDNN_API void  dnn_getstate(MODELINFO * versions, int * ncnt, const char * modelname, int version = -1);
 
 /**
- * @brief 添加以NVR、通道号、模型名为索引的深度学习服务请求对象
- * @param [in] devip     NVR IP
- * @param [in] chn       通道号
+ * @brief 添加深度学习服务请求对象
  * @param [in] modelname 模型名(使用该模型的最新版本号)
  * @return void
  */
-UTDNN_API void  dnn_addconn(const char * devip, int chn, const char * modelname);
+UTDNN_API void * dnn_addconn(const char * modelname);
 
 /**
  * @brief 单帧数据请求
- * @param [in] devip     NVR IP
- * @param [in] chn       通道号
- * @param [in] modelname 模型名
- * @param [in] data      图片数据
- * @param [in] imgid     图片帧ID
+ * @param [in] devip        NVR IP
+ * @param [in] chn          通道号
+ * @param [in] modelname    模型名
+ * @param [in] data         图片数据
+ * @param [in， out] objs   请求结果
+ * @param [in， out] size   结果数量
  */
 
-UTDNN_API void  dnn_predict(const char * devip, int chn, const char * modelname,
-                            unsigned char * data, int w, int h, DNNTARGET * objs, int *size);
+UTDNN_API void  dnn_predict(void * pdnn, unsigned char * data, int w, int h, DNNTARGET * objs, int *size, int jpgsize=0);
 
 /**
  * @brief 删除深度学习服务请求对象
@@ -94,7 +82,7 @@ UTDNN_API void  dnn_predict(const char * devip, int chn, const char * modelname,
  * @param [in] modelname 模型名
  * @return void
  */
-UTDNN_API void  dnn_rmconn(const char * devip, int chn, const char * modelname);
+UTDNN_API void  dnn_rmconn(void * pdnn);
 
 #ifdef __cplusplus
 }

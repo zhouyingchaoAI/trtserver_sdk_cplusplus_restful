@@ -28,15 +28,15 @@ using namespace std;
 class connection : public boost::enable_shared_from_this<connection>
 {
 public:
-    connection(unsigned int chn, string srvip, unsigned int srvport, int srvtype, const char * model);
+    connection(string srvip, unsigned int srvport, const char * model);
     ~connection();
 
 public:
-    void predict(unsigned char * data, int w, int h, string modelname, DNNTARGET * objs, int *size);
+    void predict(unsigned char * data, int w, int h, DNNTARGET * objs, int *size, int jpgsize);
 
     static void getstate(string ip, unsigned int port, string url, string modelname, vector<MODELINFO> &modellist);
 
-    void update(string srvip, unsigned int srvport, int srvtype);
+    void update(string srvip, unsigned int srvport);
 
 private:
     void run();
@@ -54,18 +54,17 @@ public:
     std::shared_ptr<tcp::resolver>       resolver_;
     std::shared_ptr<beast::tcp_stream>   stream_;
     beast::flat_buffer buffer_; // (Must persist between reads)
-    http::request<http::string_body> req_;
-    http::response<http::dynamic_body> res_;
+//    http::request<http::string_body> req_;
+//    http::request<http::buffer_body> req_;
+//    http::response<http::dynamic_body> res_;
     net::io_context ioc_;
 
 private:
     string       m_strip;
     unsigned int m_iport;
-    unsigned int m_ichn;
     int          m_itype;
     string       m_strmodel;
     bool         m_bExit;
-
 
     bool         m_bisconnect;
 };
