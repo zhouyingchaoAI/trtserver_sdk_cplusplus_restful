@@ -59,5 +59,5 @@ void * conlist::addconn(const char * modelname)
 void conlist::rmconn(void * pdnn)
 {
 	if (pdnn != NULL)
-		delete pdnn;
+		delete (connection*)pdnn;
 }

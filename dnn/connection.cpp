@@ -29,6 +29,7 @@ connection::connection(std::string srvip, unsigned int srvport, const char * mod
         std::cerr << "Error: " << e.what() << std::endl;
         m_bisconnect = false;
     }
+    boost::thread(boost::bind(&connection::run, this)).detach();
 }
 
 connection::~connection()
